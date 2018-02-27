@@ -1,0 +1,121 @@
+import numpy as np
+import random
+ 
+ 
+def print_array(map):
+    print(str(map[0][0]) + "  " + str(map[0][1]) + "  " + str(map[0][2]) + "  " + str(map[0][3]) + "\n" + str(
+        map[1][0]) + "  " + str(map[1][1]) + "  " + str(map[1][2]) + "  " + str(map[1][3]) + "\n" + str(
+        map[2][0]) + "  " + str(map[2][1]) + "  " + str(map[2][2]) + "  " + str(map[2][3]) + "\n" + str(
+        map[3][0]) + "  " + str(map[3][1]) + "  " + str(map[3][2]) + "  " + str(map[3][3]) + "\n")
+ 
+ 
+def random_pos(list_pos,num_pos):
+    if num_pos == 1:
+        return random.choice(list_pos)
+    elif num_pos == 2:
+        pos1 = random.choice(list_pos)
+        list_pos.remove(pos1)
+        pos2 = random.choice(list_pos)
+        new_list = [pos1,pos2]
+        return new_list
+    else:
+        return False
+ 
+ 
+def list_empty_pos(map):
+    list = [[5,5]]
+    for i in range(0,4):
+        for j in range(0,4):
+            if map[i][j] == 0:
+                list.append([i,j])
+    list.remove([5,5])
+    return list
+ 
+ 
+map = np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]])
+start = random_pos(list_empty_pos(map),2)
+map[start[0][0]][start[0][1]] = 2
+map[start[1][0]][start[1][1]] = 2
+ 
+var = -1
+xvar = -1
+yvar = -1
+count = 3
+redo = 0
+wasd = input("Do you want to start the game? (y/n) \n")
+ 
+if wasd == 'y':
+    print("GAME START ")
+    print_array(map)
+    print("please use WASD to select your play")
+    while 1:
+        wasd = input()
+ 
+        if wasd == 'x':
+            break
+ 
+        else:
+            if wasd == 'w' or wasd == 's':
+                if wasd == 'w':
+                    r = [0, 1, 2, 3]
+                    r2 = [1, 2, 3]
+                if wasd == 's':
+                    nr = [3, 2, 1, 0]
+                    nr2 = [3, 2, 1]
+ 
+                for jt in r:
+                    for it in r:
+                        if map[it][jt] == var:
+                            map[xvar][jt] = map[xvar][jt] + map[it][jt]
+                            map[it][jt] = 0
+                            var = -1
+                            redo = 1
+                        elif map[it][jt] != 0:
+                            var = map[it][jt]
+                            xvar = it
+                            yvar = jt
+                    if redo == 1:
+                        while count != 0:
+                            for kt in r2:
+                                if map[kt - 1][jt] == 0 and map[it][jt] > 0:
+                                    map[kt - 1][jt] = map[it][jt]
+                            count = count - 1
+                        count = 3
+                    redo = 0
+                    var = -1
+                    xvar = -1
+                    yvar = -1
+ 
+            if wasd == 'a' or wasd == 'd':
+                if wasd == 'd':
+                    r = [0, 1, 2, 3]
+                    r2 = [1, 2, 3]
+                if wasd == 'a':
+                    nr = [3, 2, 1, 0]
+                    nr2 = [3, 2, 1]
+ 
+                for jt in r:
+                    for it in r:
+                        if map[jt][it] == var:
+                            map[jt][yvar] = map[jt][yvar] + map[jt][it]
+                            map[jt][it] = 0
+                            var = -1
+                            redo = 1
+                        elif map[jt][it] != 0:
+                            var = map[jt][it]
+                            xvar = jt
+                            yvar = it
+                    if redo == 1:
+                        while count != 0:
+                            for kt in r2:
+                                if map[jt][kt - 1] == 0 and map[jt][it] > 0:
+                                    map[jt][kt - 1] = map[jt][it]
+                            count = count - 1
+                        count = 3
+                    redo = 0
+                    var = -1
+                    xvar = -1
+                    yvar = -1
+            print_array(map)
+ 
+    print("end")
